@@ -76,7 +76,8 @@ int initGL() {
 
     glEnable(GL_TEXTURE_2D);
     glGenTextures(1, &texture);
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -144,7 +145,7 @@ void renderG64Video() {
 					gpu->getFrameBufferHeight(),
 					0,
 					GL_RGB,
-					GL_BYTE,
+					GL_UNSIGNED_BYTE,
 					gpu->getFrameBuffer()
 				);
 

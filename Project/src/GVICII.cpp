@@ -39,13 +39,13 @@ GVICII::GVICII(G6510* _cpu)
     frameBuffer = new byte[getFrameBufferWidth()*getFrameBufferHeight()*3];
 
     // dumb fill with blue for now
-    GColour testCol(0x80, 0xff, 0x40);// = GColour::getColourByIndex(6);
+    GColour testCol = GColour::getColourByIndex(6);
     byte* currByte = frameBuffer;
     for(int y = 0; y < getFrameBufferHeight(); y++) {
 		for(int x = 0; x < getFrameBufferWidth(); x++) {
-			*(currByte++) = 0x80;//testCol.getRedByte();
-			*(currByte++) = 0x80;//testCol.getGreenByte();
-			*(currByte++) = 0x80;//testCol.getBlueByte();
+			*(currByte++) = testCol.getRedByte();
+			*(currByte++) = testCol.getGreenByte();
+			*(currByte++) = testCol.getBlueByte();
 		}
     }
 }
