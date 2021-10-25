@@ -1,0 +1,4 @@
+# depslib dependency file v1.0
+1635166200 source:/home/greggo/Code/G64/Project/main.cpp
+	<GLFW/glfw3.h>
+

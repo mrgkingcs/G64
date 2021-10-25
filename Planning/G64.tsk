@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?taskcoach release="1.4.6" tskversion="37"?>
+
+<tasks>
+<task creationDateTime="2021-10-24 13:28:16.706036" expandedContexts="('taskviewer',)" id="dd67eec0-34c5-11ec-9f28-11f17c4bcd6c" modificationDateTime="2021-10-24 13:33:10.230871" status="1" subject="First Runnable">
+<description>
+A first runnable version which displays a hard-coded 'Hello World!' message
+</description>
+<task creationDateTime="2021-10-24 13:31:45.939941" id="59faab9e-34c6-11ec-9f28-11f17c4bcd6c" modificationDateTime="2021-10-24 13:35:04.636061" status="1" subject="OpenGL GPU">
+<description>
+create an array of RGB bytes t ocover 320x200 screen
+in render thread:
+- read G6510's RAM for character index buffer and character set definition
+- draw characters into RGB bytes array, then update gl texture, then render it in centre of gl viewport
+
+</description>
+</task>
+<task creationDateTime="2021-10-24 13:33:10.225473" id="8c379d2e-34c6-11ec-9f28-11f17c4bcd6c" modificationDateTime="2021-10-24 13:34:43.882633" status="1" subject="Basic G6510 class">
+<description>
+Loads and copies zero-page ROM into RAM (or could this be hard-coded into buffer in CPP file?)
+Loads and copies character set ROM into RAM (or could this too be hard-coded into buffer in CPP file?)
+...then sits and does nothing for now.
+</description>
+</task>
+<task creationDateTime="2021-10-24 13:29:07.739719" id="fbaf35c8-34c5-11ec-9f28-11f17c4bcd6c" modificationDateTime="2021-10-24 13:31:41.198946" status="1" subject="Main App Class">
+<description>
+Main app needs to initialise glfw and create a window and opengl context.
+It then needs to create: 
+- a G6510 CPU/RAM instance, passing it filenames for a zero-page ROM and a character-set ROM
+- an OpenGL GPU instance, passing it a reference to the G6510 and the opengl context
+Then, it needs to hard-poke the message into the G6510's RAM
+</description>
+</task>
+</task>
+<syncmlconfig>
+<TaskCoach-0000017cb2452cce377af90a007f000000010001>
+<spds>
+<sources>
+<TaskCoach-0000017cb2452cce377af90a007f000000010001.Tasks />
+<TaskCoach-0000017cb2452cce377af90a007f000000010001.Notes />
+</sources>
+<syncml>
+<Auth />
+<Conn />
+</syncml>
+</spds>
+</TaskCoach-0000017cb2452cce377af90a007f000000010001>
+</syncmlconfig>
+<guid>
+0000017cb2452cce377af90a007f000000010001
+</guid>
+</tasks>
