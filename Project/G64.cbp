@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="include" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -22,6 +23,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -35,9 +37,10 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
-					<Add option="-lglfw -lrt -lm -ldl" />
+					<Add option="-lGL -lglfw -lrt -lm -ldl" />
 				</Linker>
 			</Target>
 		</Build>
@@ -45,7 +48,16 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="main.cpp" />
+		<Unit filename="include/G64.h" />
+		<Unit filename="include/G6510.h" />
+		<Unit filename="include/GColour.h" />
+		<Unit filename="include/GVICII.h" />
+		<Unit filename="include/type.h" />
+		<Unit filename="src/G64.cpp" />
+		<Unit filename="src/G6510.cpp" />
+		<Unit filename="src/GColour.cpp" />
+		<Unit filename="src/GVICII.cpp" />
+		<Unit filename="src/main.cpp" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
