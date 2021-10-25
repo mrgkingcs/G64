@@ -32,6 +32,7 @@
 #define GVICII_H
 
 #include "type.h"
+#include <thread>
 
 class G6510;
 class GColour;
@@ -53,6 +54,9 @@ class GVICII
     private:
         G6510* cpu;
         byte* frameBuffer;
+        std::thread updateThread;
+
+        void updateFrameBuffer();
 
 };
 

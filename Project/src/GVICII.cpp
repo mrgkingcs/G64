@@ -33,7 +33,9 @@
 #include "GColour.h"
 #include "type.h"
 
-GVICII::GVICII(G6510* _cpu)
+#include "plf_nanotimer.h"
+
+GVICII::GVICII(G6510* _cpu) : updateThread(&GVICII::updateFrameBuffer, this)
 {
     cpu = _cpu;
     frameBuffer = new byte[getFrameBufferWidth()*getFrameBufferHeight()*3];
@@ -56,6 +58,7 @@ GVICII::~GVICII()
 		delete [] frameBuffer;
 		frameBuffer = NULL;
     }
+    updateThread.join();
 }
 
 //========================================================================
@@ -97,3 +100,24 @@ const GColour GVICII::getBorderColour() {
 	return GColour::getColourByIndex(GColour::LIGHT_BLUE);
 }
 
+
+
+void GVICII::updateFrameBuffer()
+{
+	plf::nanotimer timer;
+	timer.start();
+	int colourIndex = 0;
+
+	for(int count = 0; count < 100; ) {
+		if(timer.get_elapsed_ms() > 100) {
+			timer.start();
+			colourIndex = (colourIndex+1) & 0xf;
+			GColour testCol = GColour::getColourByIndex(colourIndex);
+			frameBuffer[0] = testCol.getRedByte();
+			frameBuffer[1] = testCol.getGreenByte();
+			frameBuffer[2] = testCol.getBlueByte();
+			count++;
+		}
+		std::this_thread::yield();
+	}
+}
