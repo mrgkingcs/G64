@@ -1,6 +1,6 @@
 //=======================================================================================
 //
-// G6510.h
+//
 // Copyright Greg King 2021
 //
 // Distributed under the MIT licence
@@ -27,31 +27,15 @@
 //
 //=======================================================================================
 
-#ifndef G6510_H
-#define G6510_H
 
-#include "type.h"
+#include "GRom.h"
 
-
-#define RAM_SIZE (1<<16)
-
-#define MAX_ROMS (16)
-
-
-class GRom;
-
-class G6510
+GRom::GRom()
 {
-    public:
-        G6510();
-        virtual ~G6510();
+	//ctor
+}
 
-		const byte getByte(int offset);
-		const byte* const getMem(int offset, int size);
-
-    private:
-        unsigned char* RAM;
-        GRom* roms[MAX_ROMS];
-};
-
-#endif // G6510_H
+GRom::~GRom()
+{
+	//dtor
+}

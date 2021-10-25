@@ -37,6 +37,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-O0" />
 					<Add directory="include" />
 				</Compiler>
 				<Linker>
@@ -50,12 +51,16 @@
 		</Compiler>
 		<Unit filename="include/G64.h" />
 		<Unit filename="include/G6510.h" />
+		<Unit filename="include/GCharRom.h" />
 		<Unit filename="include/GColour.h" />
+		<Unit filename="include/GRom.h" />
 		<Unit filename="include/GVICII.h" />
 		<Unit filename="include/type.h" />
 		<Unit filename="src/G64.cpp" />
 		<Unit filename="src/G6510.cpp" />
+		<Unit filename="src/GCharRom.cpp" />
 		<Unit filename="src/GColour.cpp" />
+		<Unit filename="src/GRom.cpp" />
 		<Unit filename="src/GVICII.cpp" />
 		<Unit filename="src/main.cpp" />
 		<Extensions />

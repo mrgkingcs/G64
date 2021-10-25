@@ -2,7 +2,7 @@
 1635166200 source:/home/greggo/Code/G64/Project/main.cpp
 	<GLFW/glfw3.h>
 
-1635179713 source:/home/greggo/Code/G64/Project/src/GVICII.cpp
+1635179863 source:/home/greggo/Code/G64/Project/src/GVICII.cpp
 	"GVICII.h"
 	"GColour.h"
 	"type.h"
@@ -19,7 +19,7 @@
 
 1635175502 /home/greggo/Code/G64/Project/include/G64.h
 
-1635174207 /home/greggo/Code/G64/Project/include/G6510.h
+1635191513 /home/greggo/Code/G64/Project/include/G6510.h
 	"type.h"
 
 1635174056 source:/home/greggo/Code/G64/Project/src/G6510.cpp
@@ -36,4 +36,17 @@
 	"G64.h"
 	"GVICII.h"
 	"GColour.h"
+
+1635189732 source:/home/greggo/Code/G64/Project/src/GCharRom.cpp
+	"GCharRom.h"
+
+1635189821 /home/greggo/Code/G64/Project/include/GCharRom.h
+	"GRom.h"
+	"type.h"
+
+1635189829 /home/greggo/Code/G64/Project/include/GRom.h
+	"type.h"
+
+1635189712 source:/home/greggo/Code/G64/Project/src/GRom.cpp
+	"GRom.h"
 
