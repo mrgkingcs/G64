@@ -30,10 +30,13 @@
 
 #include "GVICII.h"
 
+#include "G6510.h"
 #include "GColour.h"
 #include "type.h"
 
 #include "plf_nanotimer.h"
+
+#define FRAME_MS (1000/50)
 
 GVICII::GVICII(G6510* _cpu) : updateThread(&GVICII::updateFrameBuffer, this)
 {
@@ -76,7 +79,7 @@ const byte* GVICII::getFrameBuffer() {
 //
 //========================================================================
 const int GVICII::getFrameBufferHeight() {
-	return 320;
+	return 200;
 }
 
 
@@ -86,7 +89,7 @@ const int GVICII::getFrameBufferHeight() {
 //
 //========================================================================
 const int GVICII::getFrameBufferWidth() {
-	return 200;
+	return 320;
 }
 
 
@@ -102,21 +105,69 @@ const GColour GVICII::getBorderColour() {
 
 
 
+//========================================================================
+//
+// Thread function to update frameBuffer from CPU RAM
+// (just a dummy for now)
+//
+//========================================================================
 void GVICII::updateFrameBuffer()
 {
 	plf::nanotimer timer;
 	timer.start();
 	int colourIndex = 0;
 
-	for(int count = 0; count < 100; ) {
-		if(timer.get_elapsed_ms() > 100) {
+	while(1) {
+		if (timer.get_elapsed_ms() > FRAME_MS) {
 			timer.start();
-			colourIndex = (colourIndex+1) & 0xf;
+
+			// debug draw - test rendering is actually happening
 			GColour testCol = GColour::getColourByIndex(colourIndex);
-			frameBuffer[0] = testCol.getRedByte();
-			frameBuffer[1] = testCol.getGreenByte();
-			frameBuffer[2] = testCol.getBlueByte();
-			count++;
+			frameBuffer[320*3*20] = testCol.getRedByte();
+			frameBuffer[320*3*20+1] = testCol.getGreenByte();
+			frameBuffer[320*3*20+2] = testCol.getBlueByte();
+			colourIndex = (colourIndex+1)%16;
+
+			// render the actual characters (unoptimised)
+			int charSetOffset = cpu->getByte(4) | ((int)cpu->getByte(5)<<8);
+			int charCodeOffset = cpu->getByte(6) | ((int)cpu->getByte(7)<<8);
+
+			byte colours = cpu->getByte(3);
+			GColour fgColour = GColour::getColourByIndex(colours & 15);
+			GColour bgColour = GColour::getColourByIndex(colours >> 4);
+
+			byte* baseFramePtr = frameBuffer;
+
+			for(int row = 0; row < 25; row++) {
+				for(int col = 0; col < 40; col++) {
+					byte charCode = cpu->getByte(charCodeOffset);
+					int charDefOffset = charSetOffset + charCode*8;
+
+					for(int charRow = 0; charRow < 8; charRow++) {
+						byte* currFramePtr = baseFramePtr + 40*8*3*charRow;
+						byte charDefByte = cpu->getByte(charDefOffset);
+
+						for(byte mask = 128; mask > 0; mask >>= 1) {
+							if(charDefByte & mask) {
+								*(currFramePtr++) = fgColour.getRedByte();
+								*(currFramePtr++) = fgColour.getGreenByte();
+								*(currFramePtr++) = fgColour.getBlueByte();
+							} else {
+								*(currFramePtr++) = bgColour.getRedByte();
+								*(currFramePtr++) = bgColour.getGreenByte();
+								*(currFramePtr++) = bgColour.getBlueByte();
+							}
+						}
+
+
+						charDefOffset++;
+					}
+
+					baseFramePtr += 8*3;
+					charCodeOffset++;
+				}
+				baseFramePtr += 7*320*3;
+			}
 		}
 		std::this_thread::yield();
 	}

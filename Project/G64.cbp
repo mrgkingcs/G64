@@ -41,7 +41,7 @@
 					<Add directory="include" />
 				</Compiler>
 				<Linker>
-					<Add option="-lGL -lglfw -lrt -lm -ldl" />
+					<Add option="-lGL -lglfw -lrt -lm -ldl -pthread" />
 				</Linker>
 			</Target>
 		</Build>
@@ -55,6 +55,7 @@
 		<Unit filename="include/GColour.h" />
 		<Unit filename="include/GRom.h" />
 		<Unit filename="include/GVICII.h" />
+		<Unit filename="include/plf_nanotimer.h" />
 		<Unit filename="include/type.h" />
 		<Unit filename="src/G64.cpp" />
 		<Unit filename="src/G6510.cpp" />

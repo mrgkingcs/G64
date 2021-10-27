@@ -47,6 +47,7 @@ class G6510
         virtual ~G6510();
 
 		const byte getByte(int offset);
+		void setByte(int offset, byte Value);
 		const byte* const getMem(int offset, int size);
 
     private:

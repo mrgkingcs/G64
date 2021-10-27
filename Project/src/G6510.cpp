@@ -82,6 +82,12 @@ G6510::G6510()
     config->mainScreenColours = 14 | (6 << 4);
     config->charSetPtr = 0xD000;	// read charset directly from ROM
     config->charDisplayPtr = 0xC000;	// default screen memory
+
+	int offset = 0xC000;
+    for(int counter = 0; counter < 256; counter++) {
+		setByte(offset++, counter);
+    }
+
 }
 
 G6510::~G6510()
@@ -112,6 +118,22 @@ const byte G6510::getByte(int offset)
 	}
 	return RAM[offset];
 }
+
+void G6510::setByte(int offset, byte value)
+{
+	int page = offset >> 12;
+	int romMask = 1 << page;
+
+	ZeroPageConfig* config = (ZeroPageConfig*)RAM;
+	if((config->romSwitches & romMask) != 0) {
+		if(roms[page] != NULL) {
+			roms[page]->setByte(offset & 0x0FFF, value);
+			return;
+		}
+	}
+	RAM[offset] = value;
+}
+
 
 const byte* const G6510::getMem(int offset, int size)
 {

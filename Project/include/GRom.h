@@ -40,6 +40,7 @@ class GRom
 		virtual ~GRom();
 
 		virtual const byte getByte(int offset) = 0;
+		virtual void setByte(int offset, byte value) {}
 		virtual const byte* const getMem(int offset, int size) = 0;
 
 	protected:
