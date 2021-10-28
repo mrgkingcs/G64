@@ -30,16 +30,22 @@
 #include "G64.h"
 
 #include "G6510.h"
+#include "GMemMgr.h"
 #include "GVICII.h"
 
 G64::G64()
 {
-    cpu = new G6510();
-    gpu = new GVICII(cpu);
+	mem = new GMemMgr();
+    cpu = new G6510(mem);
+    gpu = new GVICII(mem);
 }
 
 G64::~G64()
 {
+    if (mem != NULL) {
+        delete mem;
+        mem = NULL;
+    }
     if (cpu != NULL) {
         delete cpu;
         cpu = NULL;

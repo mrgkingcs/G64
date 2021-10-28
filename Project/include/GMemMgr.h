@@ -1,6 +1,6 @@
 //=======================================================================================
 //
-// GVICII.h
+//
 // Copyright Greg King 2021
 //
 // Distributed under the MIT licence
@@ -28,37 +28,32 @@
 //=======================================================================================
 
 
-#ifndef GVICII_H
-#define GVICII_H
+#ifndef GMEMMGR_H
+#define GMEMMGR_H
 
 #include "type.h"
-#include <thread>
 
-#include "GColour.h"
 
-class GMemMgr;
+#define RAM_SIZE (1<<16)
 
-class GVICII
+#define MAX_ROMS (16)
+
+
+class GRom;
+
+class GMemMgr
 {
-    public:
-        GVICII(GMemMgr* _mem);
-        virtual ~GVICII();
+	public:
+		GMemMgr();
+		virtual ~GMemMgr();
 
-        const byte* getFrameBuffer();
-        const int getFrameBufferHeight();
-        const int getFrameBufferWidth();
+		const byte getByte(int offset) const;
+		void setByte(int offset, byte Value);
+		const byte* const getMem(int offset, int size) const;
 
-        const GColour getBorderColour();
-
-    protected:
-
-    private:
-        GMemMgr* mem;
-        byte* frameBuffer;
-        std::thread updateThread;
-
-        void updateFrameBuffer();
-
+	private:
+        unsigned char* RAM;
+        GRom* roms[MAX_ROMS];
 };
 
-#endif // GVICII_H
+#endif // GMEMMGR_H

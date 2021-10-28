@@ -33,26 +33,17 @@
 #include "type.h"
 
 
-#define RAM_SIZE (1<<16)
 
-#define MAX_ROMS (16)
-
-
-class GRom;
+class GMemMgr;
 
 class G6510
 {
     public:
-        G6510();
+        G6510(GMemMgr* _mem);
         virtual ~G6510();
 
-		const byte getByte(int offset);
-		void setByte(int offset, byte Value);
-		const byte* const getMem(int offset, int size);
-
     private:
-        unsigned char* RAM;
-        GRom* roms[MAX_ROMS];
+		GMemMgr* mem;
 };
 
 #endif // G6510_H

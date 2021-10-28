@@ -30,7 +30,7 @@
 
 #include "GVICII.h"
 
-#include "G6510.h"
+#include "GMemMgr.h"
 #include "GColour.h"
 #include "type.h"
 
@@ -38,9 +38,9 @@
 
 #define FRAME_MS (1000/50)
 
-GVICII::GVICII(G6510* _cpu) : updateThread(&GVICII::updateFrameBuffer, this)
+GVICII::GVICII(GMemMgr* _mem) : updateThread(&GVICII::updateFrameBuffer, this)
 {
-    cpu = _cpu;
+    mem = _mem;
     frameBuffer = new byte[getFrameBufferWidth()*getFrameBufferHeight()*3];
 
     // dumb fill with blue for now
@@ -57,11 +57,11 @@ GVICII::GVICII(G6510* _cpu) : updateThread(&GVICII::updateFrameBuffer, this)
 
 GVICII::~GVICII()
 {
+    updateThread.join();
     if(frameBuffer != NULL) {
 		delete [] frameBuffer;
 		frameBuffer = NULL;
     }
-    updateThread.join();
 }
 
 //========================================================================
@@ -118,7 +118,7 @@ void GVICII::updateFrameBuffer()
 	int colourIndex = 0;
 
 	while(1) {
-		if (timer.get_elapsed_ms() > FRAME_MS) {
+		if (timer.get_elapsed_ms() > FRAME_MS && frameBuffer != NULL) {
 			timer.start();
 
 			// debug draw - test rendering is actually happening
@@ -129,10 +129,10 @@ void GVICII::updateFrameBuffer()
 			colourIndex = (colourIndex+1)%16;
 
 			// render the actual characters (unoptimised)
-			int charSetOffset = cpu->getByte(4) | ((int)cpu->getByte(5)<<8);
-			int charCodeOffset = cpu->getByte(6) | ((int)cpu->getByte(7)<<8);
+			int charSetOffset = mem->getByte(4) | ((int)mem->getByte(5)<<8);
+			int charCodeOffset = mem->getByte(6) | ((int)mem->getByte(7)<<8);
 
-			byte colours = cpu->getByte(3);
+			byte colours = mem->getByte(3);
 			GColour fgColour = GColour::getColourByIndex(colours & 15);
 			GColour bgColour = GColour::getColourByIndex(colours >> 4);
 
@@ -140,12 +140,12 @@ void GVICII::updateFrameBuffer()
 
 			for(int row = 0; row < 25; row++) {
 				for(int col = 0; col < 40; col++) {
-					byte charCode = cpu->getByte(charCodeOffset);
+					byte charCode = mem->getByte(charCodeOffset);
 					int charDefOffset = charSetOffset + charCode*8;
 
 					for(int charRow = 0; charRow < 8; charRow++) {
 						byte* currFramePtr = baseFramePtr + 40*8*3*charRow;
-						byte charDefByte = cpu->getByte(charDefOffset);
+						byte charDefByte = mem->getByte(charDefOffset);
 
 						for(byte mask = 128; mask > 0; mask >>= 1) {
 							if(charDefByte & mask) {

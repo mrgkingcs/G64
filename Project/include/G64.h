@@ -32,6 +32,7 @@
 
 class G6510;
 class GVICII;
+class GMemMgr;
 
 class G64
 {
@@ -43,6 +44,7 @@ class G64
 
     private:
         G6510* cpu;
+        GMemMgr* mem;
         GVICII* gpu;
 };
 
