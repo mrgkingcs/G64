@@ -16,13 +16,14 @@
 
 1635174224 /home/greggo/Code/G64/Project/include/type.h
 
-1635418160 source:/home/greggo/Code/G64/Project/src/G64.cpp
+1635420176 source:/home/greggo/Code/G64/Project/src/G64.cpp
 	"G64.h"
 	"G6510.h"
 	"GMemMgr.h"
 	"GVICII.h"
 
-1635418160 /home/greggo/Code/G64/Project/include/G64.h
+1635420176 /home/greggo/Code/G64/Project/include/G64.h
+	"GCharRom.h"
 
 1635418048 /home/greggo/Code/G64/Project/include/G6510.h
 	"type.h"
@@ -63,7 +64,7 @@
 	<sys/time.h>
 	<windows.h>
 
-1635418048 /home/greggo/Code/G64/Project/include/GMemMgr.h
+1635420088 /home/greggo/Code/G64/Project/include/GMemMgr.h
 	"type.h"
 
 1635418114 source:/home/greggo/Code/G64/Project/src/GMemMgr.cpp

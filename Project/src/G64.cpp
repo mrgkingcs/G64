@@ -33,9 +33,36 @@
 #include "GMemMgr.h"
 #include "GVICII.h"
 
+//=======================================================================================
+// Chip/ROM Layout:
+//
+//	(first two bytes in zero-page are bitfields: 1=Chip/ROM, 0=normal RAM)
+//
+//	$0000-$0FFF	- no ROM, just zero-page config
+//	$1000-$1FFF -
+//	$2000-$2FFF -
+//	$3000-$3FFF -
+//	$4000-$4FFF -
+//	$5000-$5FFF -
+//	$6000-$6FFF -
+//	$7000-$7FFF -
+//	$8000-$8FFF -
+//	$9000-$9FFF -
+//	$A000-$AFFF -
+//	$B000-$BFFF -
+//	$C000-$CFFF -
+//	$D000-$DFFF - charset ROM
+//	$E000-$EFFF - (I/O registers)
+//	$F000-$FFFF - (KERNAL)
+//=======================================================================================
+#define CHARSET_ROM (0xD)
+
 G64::G64()
 {
 	mem = new GMemMgr();
+
+	mem->setPageChip(CHARSET_ROM, &charRom);
+
     cpu = new G6510(mem);
     gpu = new GVICII(mem);
 }

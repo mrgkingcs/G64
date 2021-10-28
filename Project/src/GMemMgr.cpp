@@ -33,29 +33,7 @@
 #include "GRom.h"
 #include "GCharRom.h"
 
-//=======================================================================================
-// Chip/ROM Layout:
-//
-//	(first two bytes in zero-page are bitfields: 1=Chip/ROM, 0=normal RAM)
-//
-//	$0000-$0FFF	- no ROM, just zero-page config
-//	$1000-$1FFF -
-//	$2000-$2FFF -
-//	$3000-$3FFF -
-//	$4000-$4FFF -
-//	$5000-$5FFF -
-//	$6000-$6FFF -
-//	$7000-$7FFF -
-//	$8000-$8FFF -
-//	$9000-$9FFF -
-//	$A000-$AFFF -
-//	$B000-$BFFF -
-//	$C000-$CFFF -
-//	$D000-$DFFF - charset ROM
-//	$E000-$EFFF - I/O registers
-//	$F000-$FFFF - KERNAL
-//=======================================================================================
-#define CHARSET_ROM (0xD)
+
 
 
 
@@ -74,10 +52,11 @@ GMemMgr::GMemMgr()
 {
     RAM = new unsigned char[RAM_SIZE];
 
-    for(int romIndex = 0; romIndex < MAX_ROMS; romIndex++) {
-		roms[romIndex] = NULL;
+    for(int pageIndex = 0; pageIndex < MAX_PAGE_CHIPS; pageIndex++) {
+		pageChips[pageIndex] = NULL;
+		activePageChips[pageIndex] = NULL;
     }
-    roms[CHARSET_ROM] = new GCharRom();
+    //roms[CHARSET_ROM] = new GCharRom();
 }
 
 GMemMgr::~GMemMgr()
@@ -86,58 +65,98 @@ GMemMgr::~GMemMgr()
         delete [] RAM;
         RAM = NULL;
     }
-
-    for(int romIndex = 0; romIndex < MAX_ROMS; romIndex++) {
-		if(roms[romIndex] != NULL) {
-			delete roms[romIndex];
-			roms[romIndex] = NULL;
-		}
-    }
 }
 
 const byte GMemMgr::getByte(int offset) const
 {
 	int page = offset >> 12;
-	int romMask = 1 << page;
 
-	ZeroPageConfig* config = (ZeroPageConfig*)RAM;
-	if((config->romSwitches & romMask) != 0) {
-		if(roms[page] != NULL) {
-			return roms[page]->getByte(offset & 0x0FFF);
-		}
+	if(activePageChips[page] != NULL) {
+		return activePageChips[page]->getByte(offset & 0x0FFF);
 	}
+
 	return RAM[offset];
+//
+//	int romMask = 1 << page;
+//
+//	ZeroPageConfig* config = (ZeroPageConfig*)RAM;
+//	if((config->romSwitches & romMask) != 0) {
+//		if(roms[page] != NULL) {
+//			return roms[page]->getByte(offset & 0x0FFF);
+//		}
+//	}
+//	return RAM[offset];
 }
 
 void GMemMgr::setByte(int offset, byte value)
 {
 	int page = offset >> 12;
-	int romMask = 1 << page;
 
-	ZeroPageConfig* config = (ZeroPageConfig*)RAM;
-	if((config->romSwitches & romMask) != 0) {
-		if(roms[page] != NULL) {
-			roms[page]->setByte(offset & 0x0FFF, value);
-			return;
-		}
+	if(activePageChips[page] != NULL) {
+		activePageChips[page]->setByte(offset & 0x0FFF, value);
+	} else {
+		RAM[offset] = value;
 	}
-	RAM[offset] = value;
+
+	if(offset == 0 || offset == 1) {
+		updateActivePageChips();
+	}
+
+//	int romMask = 1 << page;
+//
+//	ZeroPageConfig* config = (ZeroPageConfig*)RAM;
+//	if((config->romSwitches & romMask) != 0) {
+//		if(roms[page] != NULL) {
+//			roms[page]->setByte(offset & 0x0FFF, value);
+//			return;
+//		}
+//	}
+//	RAM[offset] = value;
 }
 
 
 const byte* const GMemMgr::getMem(int offset, int size) const
 {
 	int page = offset >> 12;
-	int romMask = 1 << page;
 
-	ZeroPageConfig* config = (ZeroPageConfig*)RAM;
-	if((config->romSwitches & romMask) != 0) {
-		if(roms[page] != NULL) {
-			return roms[page]->getMem(offset & 0x0FFF, size);
-		}
-	}
-	if(offset < RAM_SIZE && (offset+size) <= RAM_SIZE) {
+	if(activePageChips[page] != NULL) {
+		activePageChips[page]->getMem(offset & 0x0FFF, size);
+	} else if (offset < RAM_SIZE && (offset+size) <= RAM_SIZE) {
 		return RAM+offset;
 	}
 	return NULL;
+//
+//	int romMask = 1 << page;
+//
+//	ZeroPageConfig* config = (ZeroPageConfig*)RAM;
+//	if((config->romSwitches & romMask) != 0) {
+//		if(roms[page] != NULL) {
+//			return roms[page]->getMem(offset & 0x0FFF, size);
+//		}
+//	}
+//	if(offset < RAM_SIZE && (offset+size) <= RAM_SIZE) {
+//		return RAM+offset;
+//	}
+//	return NULL;
+}
+
+
+void GMemMgr::setPageChip(byte pageID, GRom* chip) {
+	if(pageID > 0 && pageID < MAX_PAGE_CHIPS) {
+		pageChips[pageID] = chip;
+	}
+	updateActivePageChips();
+}
+
+
+void GMemMgr::updateActivePageChips() {
+	word bitField = RAM[0] | ((word)(RAM[1]) << 8);
+	for(int pageIndex = 0; pageIndex < MAX_PAGE_CHIPS; pageIndex++) {
+		word mask = 1 << pageIndex;
+		if ((bitField & mask) != 0) {
+			activePageChips[pageIndex] = pageChips[pageIndex];
+		} else {
+			activePageChips[pageIndex] = NULL;
+		}
+	}
 }

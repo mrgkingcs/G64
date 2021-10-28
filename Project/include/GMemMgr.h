@@ -36,7 +36,7 @@
 
 #define RAM_SIZE (1<<16)
 
-#define MAX_ROMS (16)
+#define MAX_PAGE_CHIPS (RAM_SIZE >> 12)
 
 
 class GRom;
@@ -51,9 +51,14 @@ class GMemMgr
 		void setByte(int offset, byte Value);
 		const byte* const getMem(int offset, int size) const;
 
+		void setPageChip(byte pageID, GRom* chip);
+
 	private:
         unsigned char* RAM;
-        GRom* roms[MAX_ROMS];
+        GRom* pageChips[MAX_PAGE_CHIPS];
+        GRom* activePageChips[MAX_PAGE_CHIPS];
+
+        void updateActivePageChips();
 };
 
 #endif // GMEMMGR_H

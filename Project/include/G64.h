@@ -30,6 +30,8 @@
 #ifndef G64_H
 #define G64_H
 
+#include "GCharRom.h"
+
 class G6510;
 class GVICII;
 class GMemMgr;
@@ -46,6 +48,8 @@ class G64
         G6510* cpu;
         GMemMgr* mem;
         GVICII* gpu;
+
+        GCharRom charRom;
 };
 
 #endif // G64_H
