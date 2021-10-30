@@ -37,11 +37,11 @@
 
 #define CHANNEL_MASK 	((1<<5)-1)
 
-#define R_SHIFT		(0)
-#define G_SHIFT		(5)
-#define B_SHIFT		(10)
+#define R_SHIFT		(11)
+#define G_SHIFT		(6)
+#define B_SHIFT		(1)
 
-#define MASK_R 			(CHANNEL_MASK)
+#define MASK_R 			(CHANNEL_MASK<<R_SHIFT)
 #define MASK_G 			(CHANNEL_MASK<<G_SHIFT)
 #define MASK_B 			(CHANNEL_MASK<<B_SHIFT)
 
@@ -75,6 +75,8 @@ class GColour
         byte getGreenByte() const	{ return unpackG()<<3; }
         byte getBlueByte() const	{ return unpackB()<<3; }
 
+        word getRGB555() const		{ return rgb;	}
+
         float getRedFloat() const	{ return (float)(unpackR()<<3)/255.f; }
         float getGreenFloat() const	{ return (float)(unpackG()<<3)/255.f; }
         float getBlueFloat() const	{ return (float)(unpackB()<<3)/255.f; }
@@ -83,8 +85,6 @@ class GColour
 
     private:
 		static GColour COLOUR_DEFS[NUM_COLOURS];
-
-        //byte rgb[3];
 
         inline byte unpackR() const {	return (byte)((rgb & MASK_R)>>R_SHIFT);	}
         inline byte unpackG() const {	return (byte)((rgb & MASK_G)>>G_SHIFT);	}
@@ -95,7 +95,7 @@ class GColour
 							((r>>3) << R_SHIFT)   |
 							((g>>3) << G_SHIFT)   |
 							((b>>3) << B_SHIFT)   |
-							0x8000	// alpha
+							0x1	// alpha
 					);
         }
 

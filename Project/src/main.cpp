@@ -140,12 +140,12 @@ void renderG64Video() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
 					gpu->getFrameBufferWidth(),
 					gpu->getFrameBufferHeight(),
 					0,
-					GL_RGB,
-					GL_UNSIGNED_BYTE,
+					GL_RGBA,
+					GL_UNSIGNED_SHORT_5_5_5_1,//GL_UNSIGNED_BYTE,
 					gpu->getFrameBuffer()
 				);
 

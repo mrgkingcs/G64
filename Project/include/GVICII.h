@@ -44,7 +44,7 @@ class GVICII
         GVICII(GMemMgr* _mem);
         virtual ~GVICII();
 
-        const byte* getFrameBuffer();
+        const word* getFrameBuffer();
         const int getFrameBufferHeight();
         const int getFrameBufferWidth();
 
@@ -54,7 +54,7 @@ class GVICII
 
     private:
         GMemMgr* mem;
-        byte* frameBuffer;
+        word* frameBuffer;
         std::thread updateThread;
 
         void updateFrameBuffer();

@@ -41,16 +41,17 @@
 GVICII::GVICII(GMemMgr* _mem) : updateThread(&GVICII::updateFrameBuffer, this)
 {
     mem = _mem;
-    frameBuffer = new byte[getFrameBufferWidth()*getFrameBufferHeight()*3];
+    frameBuffer = new word[getFrameBufferWidth()*getFrameBufferHeight()];
 
     // dumb fill with blue for now
     GColour testCol = GColour::getColourByIndex(6);
-    byte* currByte = frameBuffer;
+    word* currPx = frameBuffer;
     for(int y = 0; y < getFrameBufferHeight(); y++) {
 		for(int x = 0; x < getFrameBufferWidth(); x++) {
-			*(currByte++) = testCol.getRedByte();
-			*(currByte++) = testCol.getGreenByte();
-			*(currByte++) = testCol.getBlueByte();
+			*(currPx++) = testCol.getRGB555();
+//			*(currByte++) = testCol.getRedByte();
+//			*(currByte++) = testCol.getGreenByte();
+//			*(currByte++) = testCol.getBlueByte();
 		}
     }
 }
@@ -69,7 +70,7 @@ GVICII::~GVICII()
 // Return the byte buffer of RGB24s
 //
 //========================================================================
-const byte* GVICII::getFrameBuffer() {
+const word* GVICII::getFrameBuffer() {
 	return frameBuffer;
 }
 
@@ -123,9 +124,10 @@ void GVICII::updateFrameBuffer()
 
 			// debug draw - test rendering is actually happening
 			GColour testCol = GColour::getColourByIndex(colourIndex);
-			frameBuffer[320*3*20] = testCol.getRedByte();
-			frameBuffer[320*3*20+1] = testCol.getGreenByte();
-			frameBuffer[320*3*20+2] = testCol.getBlueByte();
+			frameBuffer[320*20] = testCol.getRGB555();
+//			frameBuffer[320*3*20] = testCol.getRedByte();
+//			frameBuffer[320*3*20+1] = testCol.getGreenByte();
+//			frameBuffer[320*3*20+2] = testCol.getBlueByte();
 			colourIndex = (colourIndex+1)%16;
 
 			// render the actual characters (unoptimised)
@@ -136,7 +138,7 @@ void GVICII::updateFrameBuffer()
 			GColour fgColour = GColour::getColourByIndex(colours & 15);
 			GColour bgColour = GColour::getColourByIndex(colours >> 4);
 
-			byte* baseFramePtr = frameBuffer;
+			word* baseFramePtr = frameBuffer;
 
 			for(int row = 0; row < 25; row++) {
 				for(int col = 0; col < 40; col++) {
@@ -144,18 +146,20 @@ void GVICII::updateFrameBuffer()
 					int charDefOffset = charSetOffset + charCode*8;
 
 					for(int charRow = 0; charRow < 8; charRow++) {
-						byte* currFramePtr = baseFramePtr + 40*8*3*charRow;
+						word* currFramePtr = baseFramePtr + 40*8*charRow;
 						byte charDefByte = mem->getByte(charDefOffset);
 
 						for(byte mask = 128; mask > 0; mask >>= 1) {
 							if(charDefByte & mask) {
-								*(currFramePtr++) = fgColour.getRedByte();
-								*(currFramePtr++) = fgColour.getGreenByte();
-								*(currFramePtr++) = fgColour.getBlueByte();
+								*(currFramePtr++) = fgColour.getRGB555();
+//								*(currFramePtr++) = fgColour.getRedByte();
+//								*(currFramePtr++) = fgColour.getGreenByte();
+//								*(currFramePtr++) = fgColour.getBlueByte();
 							} else {
-								*(currFramePtr++) = bgColour.getRedByte();
-								*(currFramePtr++) = bgColour.getGreenByte();
-								*(currFramePtr++) = bgColour.getBlueByte();
+								*(currFramePtr++) = bgColour.getRGB555();
+//								*(currFramePtr++) = bgColour.getRedByte();
+//								*(currFramePtr++) = bgColour.getGreenByte();
+//								*(currFramePtr++) = bgColour.getBlueByte();
 							}
 						}
 
@@ -163,10 +167,10 @@ void GVICII::updateFrameBuffer()
 						charDefOffset++;
 					}
 
-					baseFramePtr += 8*3;
+					baseFramePtr += 8;
 					charCodeOffset++;
 				}
-				baseFramePtr += 7*320*3;
+				baseFramePtr += 7*320;
 			}
 		}
 		std::this_thread::yield();
