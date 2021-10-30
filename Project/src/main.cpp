@@ -145,7 +145,7 @@ void renderG64Video() {
 					gpu->getFrameBufferHeight(),
 					0,
 					GL_RGBA,
-					GL_UNSIGNED_SHORT_5_5_5_1,//GL_UNSIGNED_BYTE,
+					GL_UNSIGNED_SHORT_5_5_5_1,
 					gpu->getFrameBuffer()
 				);
 

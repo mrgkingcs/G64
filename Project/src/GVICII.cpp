@@ -112,56 +112,49 @@ const GColour GVICII::getBorderColour() {
 //========================================================================
 //
 // Thread function to update frameBuffer from CPU RAM
-// (just a vanilla implementation for now)
 //
 //========================================================================
 void GVICII::updateFrameBuffer()
 {
 	plf::nanotimer timer;
 	timer.start();
-	int colourIndex = 0;
 
 	while(1) {
 		if (timer.get_elapsed_ms() > FRAME_MS && frameBuffer != NULL) {
 			timer.start();
 
-			// debug draw - test rendering is actually happening
-			GColour testCol = GColour::getColourByIndex(colourIndex);
-			frameBuffer[320*20] = testCol.getRGB555();
-			colourIndex = (colourIndex+1)%16;
-
 			// render the actual characters (unoptimised)
-//			int charSetOffset = mem->getByte(4) | ((int)mem->getByte(5)<<8);
-			int charCodeOffset = registers.charDisplayPtr;//mem->getByte(6) | ((int)mem->getByte(7)<<8);
+			const byte* charDisplayMem = mem->getMem(registers.charDisplayPtr, 40*25);
+			const byte* charSetMem = mem->getMem(registers.charSetPtr, 256*8);
 
-			byte colours = registers.mainColours;//mem->getByte(3);
+			byte colours = registers.mainColours;
 			GColour fgColour = GColour::getColourByIndex(colours & 15);
 			GColour bgColour = GColour::getColourByIndex(colours >> 4);
 
 			word* baseFramePtr = frameBuffer;
 
+			const byte* charCode = charDisplayMem;
+
 			for(int row = 0; row < 25; row++) {
 				for(int col = 0; col < 40; col++) {
-					byte charCode = mem->getByte(charCodeOffset);
-					int charDefOffset = /*registers.charSetPtr*/0xd000 + charCode*8;
+					const byte* charDefByte = charSetMem + (*charCode)*8;
 
 					for(int charRow = 0; charRow < 8; charRow++) {
 						word* currFramePtr = baseFramePtr + 40*8*charRow;
-						byte charDefByte = mem->getByte(charDefOffset);
 
 						for(byte mask = 128; mask > 0; mask >>= 1) {
-							if(charDefByte & mask) {
+							if((*charDefByte) & mask) {
 								*(currFramePtr++) = fgColour.getRGB555();
 							} else {
 								*(currFramePtr++) = bgColour.getRGB555();
 							}
 						}
 
-						charDefOffset++;
+						charDefByte++;
 					}
 
 					baseFramePtr += 8;
-					charCodeOffset++;
+					charCode++;
 				}
 				baseFramePtr += 7*320;
 			}

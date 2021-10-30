@@ -35,19 +35,6 @@
 
 
 
-
-
-typedef struct _ZERO_PAGE_CONFIG {
-	word romSwitches;		// each bit: 1 = ROM active, 0 = RAM page active
-	byte gpuFlags;			// bit 0 : 1 = don't display main screen; 0 = display
-							// bit 4-7 : border colour
-	byte mainScreenColours;	// fg = low nibble, bg = high nibble
-	word charSetPtr;		// RAM location of charset data (indexed by PETSCII codes)
-	word charDisplayPtr;	// RAM location of PETSCII char codes to draw on-screen
-} ZeroPageConfig;
-
-
-
 GMemMgr::GMemMgr()
 {
     RAM = new unsigned char[RAM_SIZE];
@@ -99,7 +86,7 @@ const byte* const GMemMgr::getMem(int offset, int size) const
 	int page = offset >> 12;
 
 	if(activePageChips[page] != NULL) {
-		activePageChips[page]->getMem(offset & 0x0FFF, size);
+		return activePageChips[page]->getMem(offset & 0x0FFF, size);
 	} else if (offset < RAM_SIZE && (offset+size) <= RAM_SIZE) {
 		return RAM+offset;
 	}

@@ -57,9 +57,9 @@ const byte GCharRom::getByte(int offset)
 const byte* const GCharRom::getMem(int offset, int size)
 {
 	if( offset >= 0) {
-		if( offset < CHARSET_SIZE && (offset+size) < CHARSET_SIZE ) {
+		if( offset < CHARSET_SIZE && (offset+size) <= CHARSET_SIZE ) {
 			return charset+offset;
-		} else if (offset < (2*CHARSET_SIZE) && (offset+size) < (2*CHARSET_SIZE)) {
+		} else if (offset < (2*CHARSET_SIZE) && (offset+size) <= (2*CHARSET_SIZE)) {
 			return charset_shifted+(offset-CHARSET_SIZE);
 		}
 	}
