@@ -2,33 +2,34 @@
 1635166200 source:/home/greggo/Code/G64/Project/main.cpp
 	<GLFW/glfw3.h>
 
-1635589177 source:/home/greggo/Code/G64/Project/src/GVICII.cpp
+1635599792 source:/home/greggo/Code/G64/Project/src/GVICII.cpp
 	"GVICII.h"
 	"GMemMgr.h"
 	"GColour.h"
 	"type.h"
 	"plf_nanotimer.h"
 
-1635589177 /home/greggo/Code/G64/Project/include/GVICII.h
+1635598907 /home/greggo/Code/G64/Project/include/GVICII.h
 	"type.h"
 	<thread>
 	"GColour.h"
 
 1635174224 /home/greggo/Code/G64/Project/include/type.h
 
-1635420176 source:/home/greggo/Code/G64/Project/src/G64.cpp
+1635599972 source:/home/greggo/Code/G64/Project/src/G64.cpp
 	"G64.h"
 	"G6510.h"
 	"GMemMgr.h"
 	"GVICII.h"
 
-1635420176 /home/greggo/Code/G64/Project/include/G64.h
+1635598707 /home/greggo/Code/G64/Project/include/G64.h
 	"GCharRom.h"
+	"GIO.h"
 
 1635418048 /home/greggo/Code/G64/Project/include/G6510.h
 	"type.h"
 
-1635418114 source:/home/greggo/Code/G64/Project/src/G6510.cpp
+1635599184 source:/home/greggo/Code/G64/Project/src/G6510.cpp
 	"G6510.h"
 	"GMemMgr.h"
 
@@ -64,11 +65,19 @@
 	<sys/time.h>
 	<windows.h>
 
-1635420088 /home/greggo/Code/G64/Project/include/GMemMgr.h
+1635599185 /home/greggo/Code/G64/Project/include/GMemMgr.h
 	"type.h"
 
-1635588424 source:/home/greggo/Code/G64/Project/src/GMemMgr.cpp
+1635599067 source:/home/greggo/Code/G64/Project/src/GMemMgr.cpp
 	"GMemMgr.h"
 	"GRom.h"
 	"GCharRom.h"
+
+1635598926 /home/greggo/Code/G64/Project/include/GIO.h
+	"type.h"
+	"GRom.h"
+
+1635598871 source:/home/greggo/Code/G64/Project/src/GIO.cpp
+	"GIO.h"
+	"GVICII.h"
 

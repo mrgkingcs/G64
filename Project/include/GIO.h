@@ -1,6 +1,6 @@
 //=======================================================================================
 //
-// G64.h
+//
 // Copyright Greg King 2021
 //
 // Distributed under the MIT licence
@@ -27,31 +27,46 @@
 //
 //=======================================================================================
 
-#ifndef G64_H
-#define G64_H
 
-#include "GCharRom.h"
-#include "GIO.h"
+//=======================================================================================
+//
+//	Offset mapping:
+//
+//	$0000-$0010 = GPU
+//		$0000 -> byte flags (bit 0 : 1 = don't display main screen; 0 = display)
+// 							bit 4-7 : border colour
+//		$0001 -> main colours: fg = low nibble, bg = high nibble
+//		$0002/3 -> char set ptr : RAM location of charset data (indexed by PETSCII codes) LO/HI
+//		$0004/5 -> char display ptr : RAM location of PETSCII char codes to draw on-screen LO/HI
+//
+//=======================================================================================
 
-class G6510;
+
+
+#ifndef GIO_H
+#define GIO_H
+
+#include "type.h"
+#include "GRom.h"
+
 class GVICII;
-class GMemMgr;
 
-class G64
+class GIO : public GRom
 {
-    public:
-        G64();
-        virtual ~G64();
+	public:
+		GIO();
+		virtual ~GIO();
 
-        GVICII* getVideo()	{ return gpu;	}
+		void setGpu(GVICII* _gpu) { gpu = _gpu; }
 
-    private:
-        G6510* cpu;
-        GMemMgr* mem;
-        GVICII* gpu;
+		virtual const byte getByte(int offset);
+		virtual void setByte(int offset, byte value);
+		virtual const byte* const getMem(int offset, int size) { return NULL; }
 
-        GIO io;
-        GCharRom charRom;
+	protected:
+
+	private:
+		GVICII* gpu;
 };
 
-#endif // G64_H
+#endif // GIO_H

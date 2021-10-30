@@ -52,6 +52,7 @@ class GMemMgr
 		const byte* const getMem(int offset, int size) const;
 
 		void setPageChip(byte pageID, GRom* chip);
+		void setRomSwitches(word switches);
 
 	private:
         unsigned char* RAM;

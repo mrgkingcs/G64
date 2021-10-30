@@ -56,15 +56,21 @@
 //	$F000-$FFFF - (KERNAL)
 //=======================================================================================
 #define CHARSET_ROM (0xD)
+#define IO_CHIP (0xE)
 
 G64::G64()
 {
 	mem = new GMemMgr();
 
 	mem->setPageChip(CHARSET_ROM, &charRom);
+	mem->setPageChip(IO_CHIP, &io);
+
+	mem->setRomSwitches((1<<CHARSET_ROM) | (1<<IO_CHIP));
 
     cpu = new G6510(mem);
     gpu = new GVICII(mem);
+
+    io.setGpu(gpu);
 }
 
 G64::~G64()

@@ -37,25 +37,6 @@ G6510::G6510(GMemMgr* _mem)
 {
 	mem = _mem;
 
-	// this whole thing should live somewhere else
-	// set ROM switches
-	mem->setByte(0, 0x00);
-	mem->setByte(1, 0x20);
-
-	// gpu flags
-	mem->setByte(2, 1 | (14 << 4));
-
-	// main screen colours
-	mem->setByte(3, 14 | (6<<4));
-
-	// charset ptr
-	mem->setByte(4, 00);
-	mem->setByte(5, 0xD0);
-
-	// char display ptr
-	mem->setByte(6, 00);
-	mem->setByte(7, 0xC0);
-
 	// DEBUG: put the entire charset onto screen
 	int offset = 0xC000;
     for(int counter = 0; counter < 256; counter++) {

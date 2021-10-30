@@ -114,6 +114,11 @@ void GMemMgr::setPageChip(byte pageID, GRom* chip) {
 	updateActivePageChips();
 }
 
+void GMemMgr::setRomSwitches(word switches) {
+	RAM[0] = switches & 0xff;
+	RAM[1] = switches >> 8;
+	updateActivePageChips();
+}
 
 void GMemMgr::updateActivePageChips() {
 	word bitField = RAM[0] | ((word)(RAM[1]) << 8);

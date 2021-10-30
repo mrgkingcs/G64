@@ -44,15 +44,46 @@ class GVICII
         GVICII(GMemMgr* _mem);
         virtual ~GVICII();
 
+        // calls from outside machine to get rendered result
         const word* getFrameBuffer();
         const int getFrameBufferHeight();
         const int getFrameBufferWidth();
 
         const GColour getBorderColour();
 
+        // calls from inside machine to interact with chip
+        void setFlags(byte value)	{ registers.flags = value; }
+        byte getFlags()				{ return registers.flags; }
+
+        void setMainColours(byte value)	{ registers.mainColours = value; }
+        byte getMainColours()			{ return registers.mainColours; }
+
+        void setCharSetPtrLo(byte value)	{ registers.charSetPtr = ((registers.charSetPtr & 0xff00) | (value)); }
+        byte getCharSetPtrLo()				{ return registers.charSetPtr & 0xff; }
+
+        void setCharSetPtrHi(byte value)	{ registers.charSetPtr = ((registers.charSetPtr & 0x00ff) | ((word)value << 8)); }
+        byte getCharSetPtrHi()				{ return registers.charSetPtr >> 8; }
+
+        void setCharDisplayPtrLo(byte value)	{ registers.charDisplayPtr = ((registers.charDisplayPtr & 0xff00) | (value)); }
+        byte getCharDisplayPtrLo()				{ return registers.charDisplayPtr & 0xff; }
+
+        void setCharDisplayPtrHi(byte value)	{ registers.charDisplayPtr = ((registers.charDisplayPtr & 0x00ff) | ((word)value << 8)); }
+        byte getCharDisplayPtrHi()				{ return registers.charDisplayPtr >> 8; }
+
+
     protected:
 
     private:
+		struct _Registers {
+			byte flags;
+			byte mainColours;
+			word charSetPtr;
+			word charDisplayPtr;
+		};
+
+		_Registers registers;
+
+
         GMemMgr* mem;
         word* frameBuffer;
         std::thread updateThread;

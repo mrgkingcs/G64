@@ -1,6 +1,6 @@
 //=======================================================================================
 //
-// G64.h
+//
 // Copyright Greg King 2021
 //
 // Distributed under the MIT licence
@@ -27,31 +27,53 @@
 //
 //=======================================================================================
 
-#ifndef G64_H
-#define G64_H
 
-#include "GCharRom.h"
 #include "GIO.h"
 
-class G6510;
-class GVICII;
-class GMemMgr;
+#include "GVICII.h"
 
-class G64
+GIO::GIO()
 {
-    public:
-        G64();
-        virtual ~G64();
+	gpu = NULL;
+}
 
-        GVICII* getVideo()	{ return gpu;	}
+GIO::~GIO()
+{
+	//dtor
+}
 
-    private:
-        G6510* cpu;
-        GMemMgr* mem;
-        GVICII* gpu;
 
-        GIO io;
-        GCharRom charRom;
-};
+//========================================================================
+//
+// get a byte from the attached chips
+//
+//========================================================================
+const byte GIO::getByte(int offset)
+{
+	switch(offset) {
+		case 0x00:	if(gpu) return gpu->getFlags();
+		case 0x01:	if(gpu) return gpu->getMainColours();
+		case 0x02: 	if(gpu) return gpu->getCharSetPtrLo();
+		case 0x03: 	if(gpu) return gpu->getCharSetPtrHi();
+		case 0x04: 	if(gpu) return gpu->getCharDisplayPtrLo();
+		case 0x05: 	if(gpu) return gpu->getCharDisplayPtrHi();
+	}
+	return 0xff;
+}
 
-#endif // G64_H
+//========================================================================
+//
+// Return the byte buffer of RGB24s
+//
+//========================================================================
+void GIO::setByte(int offset, byte value)
+{
+	switch(offset) {
+		case 0x00:	if(gpu) { gpu->setFlags(value); }
+		case 0x01:	if(gpu) { gpu->setMainColours(value); }
+		case 0x02: 	if(gpu) { gpu->setCharSetPtrLo(value); }
+		case 0x03: 	if(gpu) { gpu->setCharSetPtrHi(value); }
+		case 0x04: 	if(gpu) { gpu->setCharDisplayPtrLo(value); }
+		case 0x05: 	if(gpu) { gpu->setCharDisplayPtrHi(value); }
+	}
+}
