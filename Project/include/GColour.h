@@ -35,6 +35,16 @@
 
 #define NUM_COLOURS (16)
 
+#define CHANNEL_MASK 	((1<<5)-1)
+
+#define R_SHIFT		(0)
+#define G_SHIFT		(5)
+#define B_SHIFT		(10)
+
+#define MASK_R 			(CHANNEL_MASK)
+#define MASK_G 			(CHANNEL_MASK<<G_SHIFT)
+#define MASK_B 			(CHANNEL_MASK<<B_SHIFT)
+
 class GColour
 {
     public:
@@ -61,20 +71,35 @@ class GColour
         GColour(const GColour& other);
         virtual ~GColour();
 
-        byte getRedByte() const		{ return rgb[0];	}
-        byte getGreenByte() const	{ return rgb[1];	}
-        byte getBlueByte() const	{ return rgb[2];	}
+        byte getRedByte() const		{ return unpackR()<<3; }
+        byte getGreenByte() const	{ return unpackG()<<3; }
+        byte getBlueByte() const	{ return unpackB()<<3; }
 
-        float getRedFloat() const	{ return (float)(rgb[0])/255.f; }
-        float getGreenFloat() const	{ return (float)(rgb[1])/255.f; }
-        float getBlueFloat() const	{ return (float)(rgb[2])/255.f; }
+        float getRedFloat() const	{ return (float)(unpackR()<<3)/255.f; }
+        float getGreenFloat() const	{ return (float)(unpackG()<<3)/255.f; }
+        float getBlueFloat() const	{ return (float)(unpackB()<<3)/255.f; }
 
         static GColour getColourByIndex(int index);
 
     private:
 		static GColour COLOUR_DEFS[NUM_COLOURS];
 
-        byte rgb[3];
+        //byte rgb[3];
+
+        inline byte unpackR() const {	return (byte)((rgb & MASK_R)>>R_SHIFT);	}
+        inline byte unpackG() const {	return (byte)((rgb & MASK_G)>>G_SHIFT);	}
+        inline byte unpackB() const {	return (byte)((rgb & MASK_B)>>B_SHIFT);	}
+
+        inline word pack(byte r, byte g, byte b ) {
+			return (word)(
+							((r>>3) << R_SHIFT)   |
+							((g>>3) << G_SHIFT)   |
+							((b>>3) << B_SHIFT)   |
+							0x8000	// alpha
+					);
+        }
+
+        word rgb;	// GL_UNSIGNED_SHORT_5_5_5_1
 };
 
 #endif // GCOLOUR_H

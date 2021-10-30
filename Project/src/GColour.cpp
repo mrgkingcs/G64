@@ -51,15 +51,17 @@ GColour GColour::COLOUR_DEFS[NUM_COLOURS] = {
 
 GColour::GColour(byte r, byte g, byte b)
 {
-    rgb[0] = r;
-    rgb[1] = g;
-    rgb[2] = b;
+//    rgb[0] = r;
+//    rgb[1] = g;
+//    rgb[2] = b;
+	rgb = pack(r, g, b);
 }
 
 GColour::GColour(const GColour& other) {
-	rgb[0] = other.rgb[0];
-	rgb[1] = other.rgb[1];
-	rgb[2] = other.rgb[2];
+//	rgb[0] = other.rgb[0];
+//	rgb[1] = other.rgb[1];
+//	rgb[2] = other.rgb[2];
+	rgb = other.rgb;
 }
 
 GColour::~GColour()

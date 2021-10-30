@@ -56,7 +56,6 @@ GMemMgr::GMemMgr()
 		pageChips[pageIndex] = NULL;
 		activePageChips[pageIndex] = NULL;
     }
-    //roms[CHARSET_ROM] = new GCharRom();
 }
 
 GMemMgr::~GMemMgr()
@@ -76,17 +75,8 @@ const byte GMemMgr::getByte(int offset) const
 	}
 
 	return RAM[offset];
-//
-//	int romMask = 1 << page;
-//
-//	ZeroPageConfig* config = (ZeroPageConfig*)RAM;
-//	if((config->romSwitches & romMask) != 0) {
-//		if(roms[page] != NULL) {
-//			return roms[page]->getByte(offset & 0x0FFF);
-//		}
-//	}
-//	return RAM[offset];
 }
+
 
 void GMemMgr::setByte(int offset, byte value)
 {
@@ -101,17 +91,6 @@ void GMemMgr::setByte(int offset, byte value)
 	if(offset == 0 || offset == 1) {
 		updateActivePageChips();
 	}
-
-//	int romMask = 1 << page;
-//
-//	ZeroPageConfig* config = (ZeroPageConfig*)RAM;
-//	if((config->romSwitches & romMask) != 0) {
-//		if(roms[page] != NULL) {
-//			roms[page]->setByte(offset & 0x0FFF, value);
-//			return;
-//		}
-//	}
-//	RAM[offset] = value;
 }
 
 
@@ -125,19 +104,6 @@ const byte* const GMemMgr::getMem(int offset, int size) const
 		return RAM+offset;
 	}
 	return NULL;
-//
-//	int romMask = 1 << page;
-//
-//	ZeroPageConfig* config = (ZeroPageConfig*)RAM;
-//	if((config->romSwitches & romMask) != 0) {
-//		if(roms[page] != NULL) {
-//			return roms[page]->getMem(offset & 0x0FFF, size);
-//		}
-//	}
-//	if(offset < RAM_SIZE && (offset+size) <= RAM_SIZE) {
-//		return RAM+offset;
-//	}
-//	return NULL;
 }
 
 
