@@ -2,11 +2,22 @@
 <?taskcoach release="1.4.6" tskversion="37"?>
 
 <tasks>
-<task creationDateTime="2021-10-24 13:28:16.706036" expandedContexts="('taskviewer',)" id="dd67eec0-34c5-11ec-9f28-11f17c4bcd6c" modificationDateTime="2021-10-24 13:33:10.230871" status="1" subject="First Runnable">
+<task creationDateTime="2021-10-31 14:51:23.209754" id="041cb638-3a5a-11ec-aaad-01ee0714be4e" modificationDateTime="2021-10-31 14:53:00.935581" status="1" subject="Runnable C program">
+<description>
+Use cc65 to write a simple 'Hello World!' app, starting to build a bespoke standard library with a 'print' subroutine. 
+</description>
+</task>
+<task creationDateTime="2021-10-31 14:53:05.910034" id="41538950-3a5a-11ec-aaad-01ee0714be4e" modificationDateTime="2021-10-31 14:54:39.546171" status="1" subject="KERNAL with ISR for keyboard input">
+<description>
+standard library can have getch() to get a character from the keyboard buffer
+test app can use KERNAL getch() and print() to write keyboard input to the screen 
+</description>
+</task>
+<task completiondate="2021-10-31 14:51:11.766592" creationDateTime="2021-10-24 13:28:16.706036" expandedContexts="('taskviewer',)" id="dd67eec0-34c5-11ec-9f28-11f17c4bcd6c" modificationDateTime="2021-10-31 14:51:11.766179" percentageComplete="100" status="1" subject="First Runnable">
 <description>
 A first runnable version which displays a hard-coded 'Hello World!' message
 </description>
-<task creationDateTime="2021-10-24 13:31:45.939941" id="59faab9e-34c6-11ec-9f28-11f17c4bcd6c" modificationDateTime="2021-10-24 13:35:04.636061" status="1" subject="OpenGL GPU">
+<task completiondate="2021-10-31 14:51:11.766592" creationDateTime="2021-10-24 13:31:45.939941" id="59faab9e-34c6-11ec-9f28-11f17c4bcd6c" modificationDateTime="2021-10-24 13:35:04.636061" percentageComplete="100" status="1" subject="OpenGL GPU">
 <description>
 create an array of RGB bytes t ocover 320x200 screen
 in render thread:
@@ -15,14 +26,14 @@ in render thread:
 
 </description>
 </task>
-<task creationDateTime="2021-10-24 13:33:10.225473" id="8c379d2e-34c6-11ec-9f28-11f17c4bcd6c" modificationDateTime="2021-10-24 13:34:43.882633" status="1" subject="Basic G6510 class">
+<task completiondate="2021-10-31 14:51:11.766592" creationDateTime="2021-10-24 13:33:10.225473" id="8c379d2e-34c6-11ec-9f28-11f17c4bcd6c" modificationDateTime="2021-10-24 13:34:43.882633" percentageComplete="100" status="1" subject="Basic G6510 class">
 <description>
 Loads and copies zero-page ROM into RAM (or could this be hard-coded into buffer in CPP file?)
 Loads and copies character set ROM into RAM (or could this too be hard-coded into buffer in CPP file?)
 ...then sits and does nothing for now.
 </description>
 </task>
-<task creationDateTime="2021-10-24 13:29:07.739719" id="fbaf35c8-34c5-11ec-9f28-11f17c4bcd6c" modificationDateTime="2021-10-24 13:31:41.198946" status="1" subject="Main App Class">
+<task completiondate="2021-10-31 14:51:11.766592" creationDateTime="2021-10-24 13:29:07.739719" id="fbaf35c8-34c5-11ec-9f28-11f17c4bcd6c" modificationDateTime="2021-10-24 13:31:41.198946" percentageComplete="100" status="1" subject="Main App Class">
 <description>
 Main app needs to initialise glfw and create a window and opengl context.
 It then needs to create: 
