@@ -41,7 +41,7 @@ G6510::G6510(GMemMgr* _mem) : executionThread(&G6510::fetchExecute, this)
 	registers.control = CONTROL_STOPPED;
 
 	// DEBUG: put the entire charset onto screen
-	int offset = 0xC000;
+	int offset = 0xC028;
     for(int counter = 0; counter < 256; counter++) {
 		mem->setByte(offset++, counter);
     }

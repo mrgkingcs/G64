@@ -48,6 +48,7 @@ class GCharRom : public GRom
 	private:
 		static byte charset[CHARSET_SIZE];
 		static byte charset_shifted[CHARSET_SIZE];
+		static byte charset_ascii[CHARSET_SIZE];
 };
 
 #endif // GCHARROM_H
