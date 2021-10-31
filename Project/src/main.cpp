@@ -92,11 +92,15 @@ int initGL() {
 // Initialise the G64
 //
 //========================================================================
-int initG64() {
+int initG64(const char* const prgPath) {
     g64 = new G64();
 
     if(g64 == NULL) {
         return -1;
+    }
+
+    if(g64->loadPrg(prgPath) != 0) {
+		return -2;
     }
 
     return 0;
@@ -126,6 +130,11 @@ void disposeGL() {
 }
 
 
+//========================================================================
+//
+// Render the G64 framebuffer to OpenGL
+//
+//========================================================================
 void renderG64Video() {
     GVICII* gpu = g64->getVideo();
 
@@ -180,11 +189,21 @@ void renderG64Video() {
 //========================================================================
 int main(void)
 {
-    if(initGL() != 0)
-        return -1;
+	int errorCode;
 
-    if(initG64() != 0)
+	errorCode = initGL();
+    if(errorCode != 0) {
+		printf("Failed to initialise OpenGL.  Error code: %d\n", errorCode);
+        return -1;
+	}
+
+	errorCode = initG64("HelloWorld.prg");
+    if(errorCode != 0) {
+		printf("Failed to initialise G64.  Error code: %d\n", errorCode);
         return -2;
+	}
+
+	g64->start();
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -197,6 +216,8 @@ int main(void)
         /* Poll for and process events */
         glfwPollEvents();
     }
+
+    g64->stop();
 
     disposeG64();
     disposeGL();

@@ -88,3 +88,66 @@ G64::~G64()
         gpu = NULL;
     }
 }
+
+
+//========================================================================
+//
+// Load a C64-format PRG file and set 6510's program counter
+//
+//========================================================================
+int G64::loadPrg(const char* const filePath) {
+	if(cpu == NULL) {
+		return -1;
+	}
+
+	FILE* fptr = fopen(filePath, "rb");
+
+	if(fptr == NULL) {
+		return -2;
+	}
+
+	byte fileByte;
+	word codePtr = 0;
+
+	// read program location
+
+	// low byte
+	fread(&fileByte, 1, 1, fptr);
+	codePtr |= fileByte;
+	cpu->setProgramCounterLo(fileByte);
+
+	// high byte
+	fread(&fileByte, 1, 1, fptr);
+	codePtr |= (word)fileByte << 8;
+	cpu->setProgramCounterHi(fileByte);
+
+	while (fread(&fileByte, 1, 1, fptr) == 1) {
+		mem->setByte(codePtr++, fileByte);
+	}
+
+	fclose(fptr);
+
+	return 0;
+}
+
+//========================================================================
+//
+// Start running the G6510
+//
+//========================================================================
+void G64::start() {
+	if (cpu != NULL) {
+		cpu->start();
+	}
+}
+
+//========================================================================
+//
+// Stop running the G6510
+//
+//========================================================================
+void G64::stop() {
+	if (cpu != NULL) {
+		cpu->stop();
+	}
+}

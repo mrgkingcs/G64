@@ -31,6 +31,7 @@
 #define G6510_H
 
 #include "type.h"
+#include <thread>
 
 
 
@@ -42,8 +43,57 @@ class G6510
         G6510(GMemMgr* _mem);
         virtual ~G6510();
 
+        void setProgramCounterLo(byte value)	{ registers.programCounter = (registers.programCounter & 0xff00) | value; }
+        void setProgramCounterHi(byte value)	{ registers.programCounter = (registers.programCounter & 0xff) | ((word)value << 8); }
+
+        void start()	{ registers.control = CONTROL_RUNNING;	}
+        void stop()		{ registers.control = CONTROL_STOPPED;	}
+
     private:
+		enum {
+			CONTROL_STOPPED = 0,
+			CONTROL_RUNNING = 1
+		};
+
+		enum {
+			FLAG_NEGATIVE = 	(1<<7),
+			FLAG_OVERFLOW = 	(1<<6),
+			FLAG_BREAK = 		(1<<4),
+			FLAG_DECIMAL = 		(1<<3), // not going to use this
+			FLAG_IRQ_DISABLE = 	(1<<2),
+			FLAG_ZERO = 		(1<<1),
+			FLAG_CARRY = 		(1<<0)
+		};
+
+		struct _Registers {
+			byte control;
+			byte status_flags;
+			word programCounter;
+			byte acc;
+			byte x;
+			byte y;
+		};
+
+		_Registers registers;
+
 		GMemMgr* mem;
+
+        std::thread executionThread;
+
+		// execution thread methods
+        void fetchExecute();
+        byte fetch();
+        word fetchAddress();
+
+        bool getFlag(byte flagMask)		{ return registers.status_flags & flagMask;	}
+        void setFlag(byte flagMask)		{ registers.status_flags |= flagMask;		}
+        void clearFlag(byte flagMask)	{ registers.status_flags &= (~flagMask);	}
+        void setFlagTo(byte flagMask, bool value) {
+			if(value)
+				setFlag(flagMask);
+			else
+				clearFlag(flagMask);
+        }
 };
 
 #endif // G6510_H

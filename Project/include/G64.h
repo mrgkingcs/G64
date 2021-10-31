@@ -45,6 +45,12 @@ class G64
 
         GVICII* getVideo()	{ return gpu;	}
 
+
+        int loadPrg(const char* const filePath);
+
+        void start();
+        void stop();
+
     private:
         G6510* cpu;
         GMemMgr* mem;
